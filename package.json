@@ -1,0 +1,23 @@
+{
+  "name": "mini-market",
+  "version": "1.0.0",
+  "description": "Mini marketplace with Next.js and Express",
+  "scripts": {
+    "dev:api": "cd api && npm run dev",
+    "dev:web": "cd web && npm run dev",
+    "dev": "concurrently \"npm run dev:api\" \"npm run dev:web\"",
+    "build:api": "cd api && npm run build",
+    "build:web": "cd web && npm run build",
+    "build": "npm run build:api && npm run build:web",
+    "start:api": "cd api && npm start",
+    "start:web": "cd web && npm start",
+    "install:all": "npm install && cd api && npm install && cd ../web && npm install"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  },
+  "dependencies": {
+    "mongodb": "^6.19.0",
+    "mongoose": "^8.18.0"
+  }
+}
