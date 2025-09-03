@@ -4,10 +4,12 @@
   "description": "API for mini-market project",
   "main": "dist/index.js",
   "scripts": {
-    "dev": "ts-node-dev --env-file=.env src/index.ts",
+    "dev": "ts-node-dev -r dotenv/config src/index.ts",
     "build": "tsc",
-    "start": "node --env-file=.env dist/index.js",
-    "seed": "ts-node --env-file=.env src/scripts/seed.ts"
+    "start": "node -r dotenv/config dist/index.js",
+    "seed": "ts-node -r dotenv/config src/scripts/seed.ts",
+    "seed:dev": "ts-node-dev src/scripts/seed.ts",
+    "seed:require": "ts-node -e \"require('./src/scripts/seed.ts').seedWithRequire()\""
   },
   "dependencies": {
     "express": "^4.18.2",
