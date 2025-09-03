@@ -19,7 +19,7 @@ export default async function ProductDetailPage({
 
   try {
     product = await getProduct(id);
-  } catch (error) {
+  } catch {
     return (
       <div className="container mx-auto p-4 max-w-4xl">
         <Card className="text-center p-8">
@@ -54,7 +54,6 @@ export default async function ProductDetailPage({
       </Button>
 
       <div className="grid md:grid-cols-2 gap-8">
-        {/* Imagen grande */}
         <Card className="overflow-hidden">
           <div className="relative aspect-square">
             <Image
@@ -70,7 +69,6 @@ export default async function ProductDetailPage({
           </div>
         </Card>
 
-        {/* Información del producto */}
         <div className="space-y-6">
           <div className="flex items-center gap-3">
             <Badge
@@ -88,17 +86,14 @@ export default async function ProductDetailPage({
             </Badge>
           </div>
 
-          {/* Título - 20px */}
           <h1 className="text-xl font-bold">
             {product.name}
           </h1>
 
-          {/* Precio - 18px */}
           <p className="text-lg font-bold text-primary">
             ${product.price.toFixed(2)}
           </p>
 
-          {/* Botones de acción */}
           <div className="space-y-3">
             <Button
               disabled={!product.isAvailable}
@@ -116,7 +111,6 @@ export default async function ProductDetailPage({
             </Button>
           </div>
 
-          {/* Información adicional */}
           <Card>
             <CardContent className="p-4">
               <h3 className="font-semibold mb-2">
@@ -132,7 +126,6 @@ export default async function ProductDetailPage({
             </CardContent>
           </Card>
 
-          {/* Especificaciones */}
           <Card>
             <CardContent className="p-4">
               <h3 className="font-semibold mb-3">

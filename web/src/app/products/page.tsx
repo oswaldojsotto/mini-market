@@ -14,9 +14,13 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { getTopCheapestAvailable } from "@/shared/utils";
 
 export default function ProductsPage() {
   const [products, setProducts] = useState<Product[]>([]);
+  const [originalProducts, setOriginalProducts] = useState<
+    Product[]
+  >([]);
   const [filters, setFilters] = useState<ProductFilters>({
     sort: "name",
     order: "asc",
@@ -25,6 +29,8 @@ export default function ProductsPage() {
   });
   const [totalPages, setTotalPages] = useState(1);
   const [loading, setLoading] = useState(true);
+  const [showTopCheapest, setShowTopCheapest] =
+    useState(false);
 
   useEffect(() => {
     const loadProducts = async () => {
@@ -32,7 +38,9 @@ export default function ProductsPage() {
         setLoading(true);
         const data = await getProducts(filters);
         setProducts(data.products);
+        setOriginalProducts(data.products);
         setTotalPages(data.totalPages);
+        setShowTopCheapest(false);
       } catch (err) {
         console.error("Error loading products:", err);
       } finally {
@@ -42,7 +50,6 @@ export default function ProductsPage() {
     loadProducts();
   }, [filters]);
 
-  // useCallback para evitar recrear la función en cada render
   const handleSearchChange = useCallback(
     (search: string) => {
       setFilters(prev => ({
@@ -83,6 +90,20 @@ export default function ProductsPage() {
     setFilters(prev => ({ ...prev, page: newPage }));
   };
 
+  const handleShowTopCheapest = useCallback(() => {
+    if (showTopCheapest) {
+      setProducts(originalProducts);
+      setShowTopCheapest(false);
+    } else {
+      const cheapestProducts = getTopCheapestAvailable(
+        originalProducts,
+        3
+      );
+      setProducts(cheapestProducts);
+      setShowTopCheapest(true);
+    }
+  }, [originalProducts, showTopCheapest]);
+
   return (
     <div className="container mx-auto p-4 max-w-7xl">
       <Card className="mb-8">
@@ -96,7 +117,6 @@ export default function ProductsPage() {
         </CardHeader>
       </Card>
 
-      {/* Filtros y búsqueda */}
       <Card className="mb-8">
         <CardContent className="p-6">
           <ProductsFilter
@@ -110,11 +130,12 @@ export default function ProductsPage() {
                 : undefined
             }
             onAvailabilityChange={handleAvailabilityChange}
+            onShowTopCheapest={handleShowTopCheapest}
+            showTopCheapest={showTopCheapest}
           />
         </CardContent>
       </Card>
 
-      {/* Lista de productos */}
       {loading ? (
         <div className="grid grid-cols-1 min-[200px]:grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
           {Array.from({ length: 12 }).map((_, i) => (
@@ -142,17 +163,28 @@ export default function ProductsPage() {
         </Card>
       ) : (
         <>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5  gap-4 md:gap-6">
+          {showTopCheapest && (
+            <Card className="mb-4 bg-blue-50 border-blue-200">
+              <CardContent className="p-4 text-center">
+                <p className="text-blue-800 font-medium">
+                  Mostrando los 3 productos más baratos
+                  disponibles
+                </p>
+              </CardContent>
+            </Card>
+          )}
+
+          <div className="grid grid-cols-[repeat(auto-fit,minmax(250px,1fr))] gap-4 justify-items-center">
             {products.map(product => (
               <ProductCard
                 key={product.id}
                 product={product}
+                className="w-full sm:max-w-[250px]"
               />
             ))}
           </div>
 
-          {/* Paginación */}
-          {totalPages > 1 && (
+          {totalPages > 1 && !showTopCheapest && (
             <div className="flex justify-center mt-8 space-x-2">
               <Button
                 variant="outline"

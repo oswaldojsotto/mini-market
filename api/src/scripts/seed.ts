@@ -1,4 +1,3 @@
-// Cargar variables de entorno PRIMERO
 import { config } from 'dotenv';
 import path from 'path';
 const envPath = path.join(__dirname, '../../.env');
@@ -12,19 +11,16 @@ const seedDatabase = async (): Promise<void> => {
   try {
     console.log('🌱 Starting database seed...');
     
-    // Verificar que la variable existe
     if (!process.env.MONGODB_URI) {
       throw new Error('MONGODB_URI is not defined in environment variables');
     }
 
-    // Leer archivo JSON
     const jsonPath = path.join(__dirname, '../data/products.json');
     const jsonData = fs.readFileSync(jsonPath, 'utf-8');
     const productsData = JSON.parse(jsonData);
     
     await connectDB();
     
-    // Limpiar e insertar
     await Product.deleteMany({});
     await Product.insertMany(productsData);
     

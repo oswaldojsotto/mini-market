@@ -5,6 +5,7 @@ export interface Product {
   isAvailable: boolean;
   category: string;
   image: string;
+  className?: string;
 }
 
 export interface ProductFilters {
