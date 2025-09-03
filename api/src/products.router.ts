@@ -3,7 +3,6 @@ import Product from './models/Product';
 
 const router = Router();
 
-// GET /api/products
 router.get('/', async (req: Request, res: Response) => {
   try {
     const { search, sort = 'name', order = 'asc', page = 1, limit = 10, available } = req.query;
@@ -39,7 +38,6 @@ router.get('/', async (req: Request, res: Response) => {
   }
 });
 
-// GET /api/products/:id
 router.get('/:id', async (req: Request, res: Response) => {
   try {
     const product = await Product.findOne({ id: req.params.id });

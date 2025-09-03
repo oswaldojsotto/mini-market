@@ -11,13 +11,16 @@ import {
 
 interface ProductCardProps {
   product: Product;
+  className?: string;
 }
 
 export default function ProductCard({
   product,
+  className,
 }: ProductCardProps) {
   return (
-    <Card className="overflow-hidden  transition-all duration-300 hover:shadow-md border w-[200px]">
+    <Card
+      className={`overflow-hidden  transition-all duration-300 hover:shadow-md border w-full   ${className}`}>
       <div className="relative h-48 w-48 mx-auto">
         <Image
           src={product.image || "/placeholder-image.jpg"}
@@ -37,18 +40,15 @@ export default function ProductCard({
       </div>
 
       <CardContent className="p-3">
-        {/* Nombre - 16px, semibold */}
         <h3 className="font-semibold text-base mb-2 line-clamp-2 leading-tight">
           {product.name}
         </h3>
 
         <div className="flex items-center justify-between">
-          {/* Precio - 14px */}
           <span className="text-sm font-medium text-primary">
             ${product.price.toFixed(2)}
           </span>
 
-          {/* Categoría - badge pequeño */}
           <Badge
             variant="outline"
             className="text-xs capitalize">

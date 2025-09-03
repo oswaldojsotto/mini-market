@@ -19,6 +19,8 @@ import {
   Search,
   X,
   SlidersHorizontal,
+  TrendingUp,
+  Sparkles,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -31,6 +33,8 @@ interface ProductsFilterProps {
   onAvailabilityChange: (
     availability: string | undefined
   ) => void;
+  onShowTopCheapest: () => void;
+  showTopCheapest: boolean;
   className?: string;
 }
 
@@ -41,6 +45,7 @@ export function ProductsFilter({
   onSortChange,
   availability,
   onAvailabilityChange,
+  onShowTopCheapest,
   className,
 }: ProductsFilterProps) {
   const [localSearch, setLocalSearch] = useState("");
@@ -79,16 +84,12 @@ export function ProductsFilter({
         "flex flex-col sm:flex-row gap-4 items-end",
         className
       )}>
-      {/* Barra de búsqueda */}
       <div className="w-full flex-1">
         <Label htmlFor="search" className="sr-only">
           Buscar productos
         </Label>
         <div className="relative">
-          {/* Icono de búsqueda */}
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
-
-          {/* Input con placeholder responsive */}
           <Input
             id="search"
             type="text"
@@ -96,11 +97,8 @@ export function ProductsFilter({
             value={localSearch}
             onChange={e => setLocalSearch(e.target.value)}
             className="pl-10 pr-10 w-full text-sm sm:text-base"
-            // Mejoras de accesibilidad
             aria-describedby="search-help"
           />
-
-          {/* Botón clear con mejor UX */}
           {localSearch && (
             <button
               type="button"
@@ -111,8 +109,6 @@ export function ProductsFilter({
             </button>
           )}
         </div>
-
-        {/* Texto de ayuda opcional */}
         <p
           id="search-help"
           className="text-xs text-muted-foreground mt-1 sr-only">
@@ -121,8 +117,16 @@ export function ProductsFilter({
         </p>
       </div>
 
-      {/* Dropdown de filtros - COMPLETO */}
       <div className="flex items-center gap-2">
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={onShowTopCheapest}
+          className="flex items-center gap-2">
+          <Sparkles className="h-4 w-4" />
+          Ofertas
+        </Button>
+
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button
@@ -142,6 +146,19 @@ export function ProductsFilter({
             <DropdownMenuLabel>
               Opciones de Filtrado
             </DropdownMenuLabel>
+            <DropdownMenuSeparator />
+
+            <DropdownMenuLabel className="text-xs text-muted-foreground">
+              Ofertas Especiales
+            </DropdownMenuLabel>
+
+            <DropdownMenuItem
+              onClick={onShowTopCheapest}
+              className="flex items-center gap-2 text-amber-600">
+              <TrendingUp className="h-4 w-4" />
+              Top 3 más baratos en stock
+            </DropdownMenuItem>
+
             <DropdownMenuSeparator />
 
             <DropdownMenuLabel className="text-xs text-muted-foreground">
@@ -262,7 +279,6 @@ export function ProductsFilter({
           </DropdownMenuContent>
         </DropdownMenu>
 
-        {/* Botón para limpiar filtros (visible en mobile) */}
         {isFilterActive && (
           <Button
             variant="ghost"
