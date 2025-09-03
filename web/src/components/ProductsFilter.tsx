@@ -14,7 +14,6 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import {
-  Filter,
   SortAsc,
   SortDesc,
   Search,
@@ -45,7 +44,7 @@ export function ProductsFilter({
   className,
 }: ProductsFilterProps) {
   const [localSearch, setLocalSearch] = useState("");
-  const debouncedSearch = useDebounce(localSearch, 300);
+  const debouncedSearch = useDebounce(localSearch, 500);
 
   useEffect(() => {
     onSearchChange(debouncedSearch);
